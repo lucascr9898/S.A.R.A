@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificar Produto — S.A.R.A</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-hero { padding: 140px 40px 60px; max-width: 1200px; margin: 0 auto; }
+
+.verify-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.scanner-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+
+.scanner-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.scanner-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+.qr-visual {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 200px;
+  margin: 0 auto 28px;
+  border: 2px dashed rgba(0,229,160,0.3);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+}
+.qr-visual::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  animation: scan 2s ease-in-out infinite;
+  box-shadow: 0 0 12px var(--accent);
+}
+@keyframes scan {
+  0%   { top: 0; }
+  50%  { top: calc(100% - 2px); }
+  100% { top: 0; }
+}
+.qr-icon { font-size: 40px; }
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.input-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.input-field {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s;
+  width: 100%;
+}
+.input-field:focus { border-color: rgba(0,229,160,0.4); }
+.input-field::placeholder { color: var(--muted); }
+
+.verify-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.divider-or::before, .divider-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.samples-title {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.sample-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sample-chip {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all .2s;
+  font-size: 13px;
+}
+.sample-chip:hover {
+  border-color: rgba(0,229,160,0.3);
+  background: var(--surface);
+}
+.sample-chip .sample-code { font-family: monospace; color: var(--accent); font-size: 12px; }
+.sample-chip .sample-name { color: var(--muted); }
+.sample-chip .sample-ok  { color: var(--accent); font-size: 11px; font-weight: 500; }
+.sample-chip .sample-bad { color: var(--warn);   font-size: 11px; font-weight: 500; }
+
+#result-panel {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+}
+#result-panel.show { display: flex; }
+
+.result-header {
+  padding: 28px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.result-header.ok   { background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.2); border-bottom: none; }
+.result-header.warn { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.2); border-bottom: none; }
+.result-header.info { background: rgba(100,160,255,0.08); border: 1px solid rgba(100,160,255,0.2); border-bottom: none; }
+
+.result-icon { font-size: 36px; }
+.result-status-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.ok .result-status-title   { color: var(--accent); }
+.warn .result-status-title { color: var(--warn); }
+.info .result-status-title { color: #64a0ff; }
+.result-status-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+.result-body {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 24px 28px;
+}
+
+.result-rows { display: flex; flex-direction: column; gap: 0; }
+.r-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.r-row:last-child { border-bottom: none; }
+.r-key { color: var(--muted); }
+.r-val { color: var(--text); font-weight: 500; }
+.r-val.ok   { color: var(--accent); }
+.r-val.warn { color: var(--warn); }
+
+.result-actions { margin-top: 20px; display: flex; gap: 12px; }
+
+.result-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  text-align: center;
+  gap: 14px;
+}
+.result-empty-icon { font-size: 48px; opacity: .4; }
+.result-empty p { font-size: 14px; max-width: 220px; line-height: 1.6; }
+
+.loading-dots {
+  display: none;
+  gap: 6px;
+  justify-content: center;
+  padding: 32px;
+}
+.loading-dots.show { display: flex; }
+.dot-anim {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dotpulse .8s ease-in-out infinite;
+}
+.dot-anim:nth-child(2) { animation-delay: .15s; }
+.dot-anim:nth-child(3) { animation-delay: .3s; }
+@keyframes dotpulse {
+  0%,100% { transform: scale(1); opacity: .4; }
+  50%      { transform: scale(1.4); opacity: 1; }
+}
+
+/* Badge de status da API */
+.api-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.api-status.online  { background: rgba(0,229,160,0.1); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+.api-status.offline { background: rgba(255,68,68,0.1); color: var(--warn); border: 1px solid rgba(255,68,68,0.2); }
+.api-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+@media (max-width: 768px) {
+  .verify-layout { grid-template-columns: 1fr; }
+  .page-hero { padding: 120px 20px 40px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">S.A.R.A<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="como-funciona.html">Como funciona</a></li>
+    <li><a href="verificar.html" class="active">Verificar produto</a></li>
+    <li><a href="aplicacoes.html">Aplicações</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="verificar.html" class="nav-cta">Verificar agora</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="badge">Verificação Real</div>
+  <h1 class="section-title fade-up">Verificar produto</h1>
+  <p class="section-sub fade-up">Insira o código do QR Code ou escolha um exemplo abaixo para verificar a autenticidade via API.</p>
+</div>
+
+<section style="padding-top:0">
+  <div class="verify-layout">
+
+    <!-- Painel esquerdo: input -->
+    <div class="scanner-box fade-up">
+
+      <div id="api-status-badge" class="api-status offline">
+        <span class="api-dot"></span> Verificando API...
+      </div>
+
+      <div class="scanner-title">Escanear QR Code</div>
+      <div class="scanner-sub">Em produção, a câmera do celular lê automaticamente</div>
+
+      <div class="qr-visual">
+        <div class="qr-icon">⬛</div>
+        <span>Câmera ativa</span>
+      </div>
+
+      <div class="divider-or">ou insira o código manualmente</div>
+
+      <div class="input-group">
+        <label class="input-label">Código do QR</label>
+        <input class="input-field" id="qr-input" placeholder="Ex: SARA-2026-00142-OK" />
+      </div>
+
+      <button class="btn btn-primary verify-btn" onclick="verificar()">
+        Verificar autenticidade
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+      <div style="margin-top:28px">
+        <div class="samples-title">Exemplos para testar</div>
+        <div class="sample-chips">
+          <div class="sample-chip" onclick="loadSample('SARA-2026-00142-OK')">
+            <div>
+              <div class="sample-code">SARA-2026-00142-OK</div>
+              <div class="sample-name">Perfume X · Loja Y</div>
+            </div>
+            <span class="sample-ok">● Original</span>
+          </div>
+          <div class="sample-chip" onclick="loadSample('SARA-2026-00089-OK')">
+            <div>
+              <div class="sample-code">SARA-2026-00089-OK</div>
+              <div class="sample-name">Medicamento Z · Farmácia</div>
+            </div>
+            <span class="sample-ok">● Original</span>
+          </div>
+          <div class="sample-chip" onclick="loadSample('SARA-2026-00031-FRAUD')">
+            <div>
+              <div class="sample-code">SARA-2026-00031-FRAUD</div>
+              <div class="sample-name">Bolsa Luxo · Desconhecido</div>
+            </div>
+            <span class="sample-bad">⚠ Fraude</span>
+          </div>
+          <div class="sample-chip" onclick="loadSample('SARA-2026-00077-FRAUD')">
+            <div>
+              <div class="sample-code">SARA-2026-00077-FRAUD</div>
+              <div class="sample-name">Eletrônico X · Marketplace</div>
+            </div>
+            <span class="sample-bad">⚠ Fraude</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel direito: resultado -->
+    <div id="result-container" class="fade-up">
+
+      <div class="result-empty" id="empty-state">
+        <div class="result-empty-icon">🔍</div>
+        <p>Insira um código ou escolha um exemplo para ver o resultado</p>
+      </div>
+
+      <div class="loading-dots" id="loading">
+        <div class="dot-anim"></div>
+        <div class="dot-anim"></div>
+        <div class="dot-anim"></div>
+      </div>
+
+      <div id="result-panel">
+        <div class="result-header" id="result-header">
+          <div class="result-icon" id="result-icon"></div>
+          <div>
+            <div class="result-status-title" id="result-status-title"></div>
+            <div class="result-status-sub" id="result-status-sub"></div>
+          </div>
+        </div>
+        <div class="result-body">
+          <div class="result-rows" id="result-rows"></div>
+          <div class="result-actions">
+            <button class="btn btn-outline" onclick="resetar()" style="font-size:13px;padding:10px 20px">← Nova consulta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <strong>S.A.R.A</strong> · Sistema Automático de Reconhecimento de Autenticidade · Projeto Acadêmico
+</footer>
+
+<script>
+// ── Configuração da API ──────────────────────────────────────────────────
+const API_URL = 'http://localhost:3000';
+
+// ── Verifica se a API está online ao carregar a página ───────────────────
+async function checarAPI() {
+  const badge = document.getElementById('api-status-badge');
+  try {
+    const res = await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      badge.className = 'api-status online';
+      badge.innerHTML = '<span class="api-dot"></span> API conectada';
+    } else {
+      throw new Error('API offline');
+    }
+  } catch {
+    badge.className = 'api-status offline';
+    badge.innerHTML = '<span class="api-dot"></span> API offline — rode o backend';
+  }
+}
+
+checarAPI();
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+function fmt(val) {
+  if (!val) return '—';
+  // Tenta formatar datas ISO
+  if (typeof val === 'string' && val.match(/^\d{4}-\d{2}-\d{2}/)) {
+    return new Date(val).toLocaleDateString('pt-BR');
+  }
+  return val;
+}
+
+function row(label, value, cls = '') {
+  return `<div class="r-row">
+    <span class="r-key">${label}</span>
+    <span class="r-val ${cls}">${fmt(value)}</span>
+  </div>`;
+}
+
+// ── Carrega amostra no input ─────────────────────────────────────────────
+function loadSample(code) {
+  document.getElementById('qr-input').value = code;
+  verificar();
+}
+
+// ── Verificação principal (chama a API real) ──────────────────────────────
+async function verificar() {
+  const code = document.getElementById('qr-input').value.trim();
+  if (!code) return;
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('loading').classList.add('show');
+
+  try {
+    const res = await fetch(`${API_URL}/api/verificar/${encodeURIComponent(code)}`);
+    const data = await res.json();
+    document.getElementById('loading').classList.remove('show');
+    mostrarResultado(data, res.status);
+  } catch (err) {
+    document.getElementById('loading').classList.remove('show');
+    mostrarErroConexao();
+  }
+}
+
+// ── Renderiza resultado da API ────────────────────────────────────────────
+function mostrarResultado(data, status) {
+  const panel  = document.getElementById('result-panel');
+  const header = document.getElementById('result-header');
+
+  // Produto não encontrado
+  if (status === 404 || data.resultado === 'nao_encontrado') {
+    header.className = 'result-header warn';
+    document.getElementById('result-icon').textContent = '❓';
+    document.getElementById('result-status-title').textContent = 'Código não encontrado';
+    document.getElementById('result-status-sub').textContent = 'Este QR Code não está cadastrado no sistema S.A.R.A';
+    document.getElementById('result-rows').innerHTML =
+      row('Código', data.codigo, 'warn') +
+      row('Status', 'Não cadastrado', 'warn') +
+      row('Recomendação', 'Não consumir / não comprar', 'warn');
+
+  // Fraude detectada
+  } else if (data.resultado === 'fraude') {
+    header.className = 'result-header warn';
+    document.getElementById('result-icon').textContent = '⚠️';
+    document.getElementById('result-status-title').textContent = 'Alerta de possível fraude';
+    document.getElementById('result-status-sub').textContent = data.mensagem;
+    document.getElementById('result-rows').innerHTML =
+      row('Produto', data.produto?.nome) +
+      row('Marca', data.produto?.marca, 'warn') +
+      row('Lote', data.produto?.lote, 'warn') +
+      row('Escaneamentos', `${data.total_verificacoes}× — suspeito`, 'warn') +
+      row('Recomendação', 'Não consumir / acionar autoridades', 'warn');
+
+  // Produto não vendido
+  } else if (data.resultado === 'nao_vendido') {
+    header.className = 'result-header info';
+    document.getElementById('result-icon').textContent = '🔵';
+    document.getElementById('result-status-title').textContent = 'Produto não registrado como vendido';
+    document.getElementById('result-status-sub').textContent = data.mensagem;
+    document.getElementById('result-rows').innerHTML =
+      row('Produto', data.produto?.nome) +
+      row('Marca', data.produto?.marca) +
+      row('Lote', data.produto?.lote) +
+      row('Fabricação', data.produto?.fabricacao) +
+      row('Origem', data.produto?.origem) +
+      row('Status', 'Aguardando venda', '');
+
+  // Produto autêntico
+  } else if (data.resultado === 'original') {
+    header.className = 'result-header ok';
+    document.getElementById('result-icon').textContent = '✅';
+    document.getElementById('result-status-title').textContent = 'Produto autêntico';
+    document.getElementById('result-status-sub').textContent = 'Origem verificada — produto registrado e vendido legitimamente';
+    document.getElementById('result-rows').innerHTML =
+      row('Produto', data.produto?.nome) +
+      row('Marca', data.produto?.marca) +
+      row('Categoria', data.produto?.categoria) +
+      row('Lote', data.produto?.lote) +
+      row('Fabricação', data.produto?.fabricacao) +
+      row('Origem', data.produto?.origem) +
+      row('Data da venda', data.venda?.data, 'ok') +
+      row('Local da venda', data.venda?.local) +
+      row('Vendedor', data.venda?.vendedor);
+
+  // Resposta inesperada
+  } else {
+    header.className = 'result-header warn';
+    document.getElementById('result-icon').textContent = '❗';
+    document.getElementById('result-status-title').textContent = 'Resposta inesperada';
+    document.getElementById('result-status-sub').textContent = 'Tente novamente ou verifique o backend';
+    document.getElementById('result-rows').innerHTML = row('Detalhes', JSON.stringify(data));
+  }
+
+  panel.classList.add('show');
+}
+
+// ── Erro de conexão (API offline) ─────────────────────────────────────────
+function mostrarErroConexao() {
+  const panel  = document.getElementById('result-panel');
+  const header = document.getElementById('result-header');
+  header.className = 'result-header warn';
+  document.getElementById('result-icon').textContent = '🔌';
+  document.getElementById('result-status-title').textContent = 'Sem conexão com a API';
+  document.getElementById('result-status-sub').textContent = 'O backend não está respondendo em ' + API_URL;
+  document.getElementById('result-rows').innerHTML =
+    row('Solução', 'Rode: cd backend && npm start', 'warn') +
+    row('Porta esperada', '3000');
+  panel.classList.add('show');
+}
+
+// ── Resetar ───────────────────────────────────────────────────────────────
+function resetar() {
+  document.getElementById('qr-input').value = '';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('empty-state').style.display = '';
+}
+
+// ── Enter no input ────────────────────────────────────────────────────────
+document.getElementById('qr-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verificar();
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

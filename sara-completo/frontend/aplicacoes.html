@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplicações — S.A.R.A</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-hero { padding: 140px 40px 60px; max-width: 1200px; margin: 0 auto; }
+
+.sectors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 56px;
+}
+
+.sector-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: all .3s;
+  cursor: default;
+}
+.sector-card:hover {
+  border-color: rgba(0,229,160,0.2);
+  transform: translateY(-4px);
+  background: var(--bg3);
+}
+
+.sector-icon { font-size: 36px; margin-bottom: 16px; }
+.sector-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.sector-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.sector-risk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.risk-high   { background: rgba(255,68,68,0.1);   color: #ff6b6b; border: 1px solid rgba(255,68,68,0.2); }
+.risk-medium { background: rgba(255,168,0,0.1);   color: #ffa800; border: 1px solid rgba(255,168,0,0.2); }
+.risk-accent { background: rgba(0,229,160,0.08);  color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+
+/* ── Benefícios ── */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 56px;
+}
+.benefit-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+.benefit-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.benefit-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.benefit-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ── CTA ── */
+.cta-block {
+  background: var(--bg2);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: var(--radius-lg);
+  padding: 56px;
+  text-align: center;
+  margin-top: 80px;
+}
+.cta-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.cta-sub { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+.cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 120px 20px 40px; }
+  .benefits-grid { grid-template-columns: 1fr; }
+  .cta-block { padding: 36px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">S.A.R.A<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="como-funciona.html">Como funciona</a></li>
+    <li><a href="verificar.html">Verificar produto</a></li>
+    <li><a href="aplicacoes.html" class="active">Aplicações</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="verificar.html" class="nav-cta">Verificar agora</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="badge">Setores</div>
+  <h1 class="section-title fade-up">Onde o S.A.R.A se aplica</h1>
+  <p class="section-sub fade-up">O sistema é universal — qualquer produto com embalagem pode receber um QR Code rastreável.</p>
+</div>
+
+<section style="padding-top:0">
+
+  <div class="sectors-grid">
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">💊</div>
+      <div class="sector-title">Medicamentos</div>
+      <div class="sector-desc">Falsificações de medicamentos colocam vidas em risco diretamente. O S.A.R.A garante que o remédio adquirido veio de um distribuidor autorizado e não teve a embalagem reutilizada.</div>
+      <span class="sector-risk risk-high">⬤ Risco alto</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">🍾</div>
+      <div class="sector-title">Bebidas</div>
+      <div class="sector-desc">Bebidas adulteradas ou com reenchimento de garrafas são problemas comuns. O QR Code no vidro garante que o produto não foi adulterado após sair da fábrica.</div>
+      <span class="sector-risk risk-high">⬤ Risco alto</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">💄</div>
+      <div class="sector-title">Cosméticos</div>
+      <div class="sector-desc">Cosméticos falsificados podem causar reações alérgicas graves. A verificação protege o consumidor e a reputação das marcas do setor de beleza.</div>
+      <span class="sector-risk risk-high">⬤ Risco alto</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">🌸</div>
+      <div class="sector-title">Perfumes</div>
+      <div class="sector-desc">Perfumes falsificados são amplamente comercializados. O S.A.R.A verifica se o frasco é original e se a venda foi registrada em loja autorizada.</div>
+      <span class="sector-risk risk-medium">⬤ Risco médio</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">📱</div>
+      <div class="sector-title">Eletrônicos</div>
+      <div class="sector-desc">Carregadores, baterias e acessórios falsificados causam acidentes domésticos. O rastreamento garante que o produto veio de um fornecedor certificado.</div>
+      <span class="sector-risk risk-medium">⬤ Risco médio</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">🔧</div>
+      <div class="sector-title">Peças automotivas</div>
+      <div class="sector-desc">Peças falsificadas em veículos são um risco de segurança grave. O S.A.R.A permite verificar se freios, filtros e componentes críticos são originais.</div>
+      <span class="sector-risk risk-high">⬤ Risco alto</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">🥫</div>
+      <div class="sector-title">Alimentos</div>
+      <div class="sector-desc">Alimentos com embalagem reutilizada ou com adulteração de datas de validade representam risco sanitário. O sistema garante rastreabilidade do lote.</div>
+      <span class="sector-risk risk-medium">⬤ Risco médio</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">👜</div>
+      <div class="sector-title">Produtos de luxo</div>
+      <div class="sector-desc">Bolsas, relógios e acessórios de luxo são os itens mais falsificados no mundo. O S.A.R.A adiciona uma camada tecnológica de autenticidade inviolável.</div>
+      <span class="sector-risk risk-accent">⬤ Alta demanda</span>
+    </div>
+
+    <div class="sector-card fade-up">
+      <div class="sector-icon">👗</div>
+      <div class="sector-title">Roupas e calçados</div>
+      <div class="sector-desc">Roupas com etiquetas falsas prejudicam marcas e consumidores. A aplicação de QR Codes em lacres e etiquetas garante a autenticidade da peça.</div>
+      <span class="sector-risk risk-accent">⬤ Alta demanda</span>
+    </div>
+
+  </div>
+
+  <!-- Benefícios -->
+  <div class="section-label" style="margin-top:80px">Benefícios</div>
+  <h2 class="section-title fade-up">O que o S.A.R.A entrega</h2>
+
+  <div class="benefits-grid">
+    <div class="benefit-card fade-up">
+      <div class="benefit-num">100%</div>
+      <div class="benefit-title">Rastreável</div>
+      <div class="benefit-desc">Cada produto tem um identificador único vinculado ao banco de dados desde a fabricação até a venda final.</div>
+    </div>
+    <div class="benefit-card fade-up">
+      <div class="benefit-num">3s</div>
+      <div class="benefit-title">Verificação rápida</div>
+      <div class="benefit-desc">O consumidor escaneia o QR Code com a câmera do celular e recebe o resultado em segundos, sem instalar nenhum aplicativo.</div>
+    </div>
+    <div class="benefit-card fade-up">
+      <div class="benefit-num">0</div>
+      <div class="benefit-title">Apps necessários</div>
+      <div class="benefit-desc">A verificação abre direto no navegador. Sem barreiras de instalação — qualquer smartphone moderno funciona.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block fade-up">
+    <h2 class="cta-title">Pronto para testar?</h2>
+    <p class="cta-sub">Experimente a simulação de verificação de produto agora mesmo</p>
+    <div class="cta-actions">
+      <a href="verificar.html" class="btn btn-primary">Verificar produto →</a>
+      <a href="como-funciona.html" class="btn btn-outline">Como funciona</a>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <strong>S.A.R.A</strong> · Sistema Automático de Reconhecimento de Autenticidade · Projeto Acadêmico
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

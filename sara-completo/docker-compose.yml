@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+  # ── Banco de dados PostgreSQL ──────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: sara_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       sara_db
+      POSTGRES_USER:     sara_user
+      POSTGRES_PASSWORD: sara_senha_segura
+    ports:
+      - "5432:5432"
+    volumes:
+      - sara_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sara_user -d sara_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── API Node.js ────────────────────────────────────────────────────────
+  api:
+    build: .
+    container_name: sara_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT:         3000
+      NODE_ENV:     production
+      DB_HOST:      db
+      DB_PORT:      5432
+      DB_NAME:      sara_db
+      DB_USER:      sara_user
+      DB_PASSWORD:  sara_senha_segura
+      JWT_SECRET:   sara_jwt_secret_troque_em_producao
+      JWT_EXPIRES_IN: 24h
+      BASE_URL:     http://localhost:3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  sara_db_data:

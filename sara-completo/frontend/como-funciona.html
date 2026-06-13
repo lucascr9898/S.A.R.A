@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como funciona — S.A.R.A</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-hero {
+  padding: 140px 40px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Stepper ── */
+.steps-container {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 32px;
+  position: relative;
+}
+
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-num {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: all .3s;
+}
+.step:hover .step-num {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+.step-line {
+  width: 1px;
+  flex: 1;
+  min-height: 40px;
+  background: linear-gradient(to bottom, rgba(0,229,160,0.3), var(--border));
+  margin-top: 4px;
+}
+.step:last-child .step-line { display: none; }
+
+.step-content {
+  padding: 0 0 60px;
+}
+.step-tag {
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.step-body {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+.step-detail {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+.chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.chip.accent {
+  border-color: rgba(0,229,160,0.25);
+  color: var(--accent);
+  background: rgba(0,229,160,0.06);
+}
+
+/* ── Arquitetura ── */
+.arch-diagram {
+  margin-top: 56px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  overflow-x: auto;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.arch-node {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 130px;
+  transition: border-color .3s;
+}
+.arch-node:hover { border-color: rgba(0,229,160,0.4); }
+.arch-node-icon { font-size: 24px; margin-bottom: 6px; }
+.arch-node-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.arch-node-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.arch-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--accent);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.arch-node.highlight {
+  border-color: rgba(0,229,160,0.35);
+  background: linear-gradient(135deg, rgba(0,229,160,0.06), var(--surface));
+}
+
+/* ── Resultado da verificação ── */
+.result-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 48px;
+}
+.result-card {
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid;
+}
+.result-card.ok {
+  background: rgba(0,229,160,0.04);
+  border-color: rgba(0,229,160,0.2);
+}
+.result-card.fraud {
+  background: rgba(255,68,68,0.04);
+  border-color: rgba(255,68,68,0.2);
+}
+.result-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.ok .status-dot { background: var(--accent); }
+.fraud .status-dot { background: var(--warn); }
+.status-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.ok .status-label { color: var(--accent); }
+.fraud .status-label { color: var(--warn); }
+.result-product {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.result-row span:last-child { color: var(--text); }
+.result-alert {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--warn);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .page-hero { padding: 120px 20px 40px; }
+  .step { grid-template-columns: 56px 1fr; }
+  .arch-row { flex-wrap: wrap; gap: 12px; }
+  .arch-arrow { transform: rotate(90deg); }
+  .result-preview { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">S.A.R.A<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="como-funciona.html" class="active">Como funciona</a></li>
+    <li><a href="verificar.html">Verificar produto</a></li>
+    <li><a href="aplicacoes.html">Aplicações</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="verificar.html" class="nav-cta">Verificar agora</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="badge">Funcionamento</div>
+  <h1 class="section-title fade-up">Como o S.A.R.A funciona</h1>
+  <p class="section-sub fade-up">Do registro na fábrica até a verificação pelo consumidor — cada produto tem uma identidade única e rastreável.</p>
+</div>
+
+<section style="padding-top:0">
+
+  <div class="steps-container">
+
+    <div class="step fade-up">
+      <div class="step-left">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Fabricação</div>
+        <h3 class="step-title">Registro do produto</h3>
+        <p class="step-body">Durante a fabricação ou distribuição, cada produto recebe um QR Code único gerado pelo sistema S.A.R.A e registrado no banco de dados central.</p>
+        <div class="step-detail">
+          <span class="chip accent">QR Code único</span>
+          <span class="chip">Nome do produto</span>
+          <span class="chip">Lote de fabricação</span>
+          <span class="chip">Código de barras</span>
+          <span class="chip">Data de fabricação</span>
+          <span class="chip">Local de distribuição</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step fade-up">
+      <div class="step-left">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Ponto de venda</div>
+        <h3 class="step-title">Registro da venda</h3>
+        <p class="step-body">Quando o produto é vendido, o código de barras é escaneado normalmente no caixa. O S.A.R.A registra automaticamente a venda com data, hora e local.</p>
+        <div class="step-detail">
+          <span class="chip accent">Venda registrada</span>
+          <span class="chip">Data e horário</span>
+          <span class="chip">Local da venda</span>
+          <span class="chip">ID do produto</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step fade-up">
+      <div class="step-left">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Consumidor</div>
+        <h3 class="step-title">Verificação via celular</h3>
+        <p class="step-body">Após a compra, o consumidor escaneia o QR Code com a câmera do celular. O sistema abre automaticamente uma página com o resultado da verificação.</p>
+        <div class="step-detail">
+          <span class="chip accent">Câmera do celular</span>
+          <span class="chip">Sem app necessário</span>
+          <span class="chip">Resultado imediato</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step fade-up">
+      <div class="step-left">
+        <div class="step-num">04</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Resultado</div>
+        <h3 class="step-title">Autêntico ou alerta de fraude</h3>
+        <p class="step-body">O sistema exibe as informações do produto se ele for autêntico, ou emite um alerta de possível falsificação caso o QR Code já tenha sido escaneado anteriormente.</p>
+
+        <div class="result-preview">
+          <div class="result-card ok">
+            <div class="result-status">
+              <div class="status-dot"></div>
+              <span class="status-label">Produto original</span>
+            </div>
+            <div class="result-product">Perfume X — 100ml</div>
+            <div class="result-row"><span>Data da venda</span><span>10/03/2026</span></div>
+            <div class="result-row"><span>Local</span><span>Loja Y — SP</span></div>
+            <div class="result-row"><span>Lote</span><span>LT-2026-004</span></div>
+          </div>
+          <div class="result-card fraud">
+            <div class="result-status">
+              <div class="status-dot"></div>
+              <span class="status-label">Alerta de fraude</span>
+            </div>
+            <div class="result-product">QR Code suspeito</div>
+            <div class="result-row"><span>Status</span><span>Já registrado</span></div>
+            <div class="result-row"><span>Escaneamentos</span><span>3 vezes</span></div>
+            <div class="result-alert">⚠ Este produto já foi registrado anteriormente. Verifique a procedência antes de consumir.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Arquitetura -->
+  <div class="section-label" style="margin-top:40px">Arquitetura técnica</div>
+  <h2 class="section-title fade-up">Fluxo do sistema</h2>
+
+  <div class="arch-diagram fade-up">
+    <div class="arch-row">
+      <div class="arch-node">
+        <div class="arch-node-icon">🏭</div>
+        <div class="arch-node-title">Fabricante</div>
+        <div class="arch-node-sub">Gera QR Code</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node highlight">
+        <div class="arch-node-icon">⚙️</div>
+        <div class="arch-node-title">API S.A.R.A</div>
+        <div class="arch-node-sub">Node.js / Express</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node highlight">
+        <div class="arch-node-icon">🗄️</div>
+        <div class="arch-node-title">Banco de dados</div>
+        <div class="arch-node-sub">PostgreSQL</div>
+      </div>
+      <div class="arch-arrow">←→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">🛒</div>
+        <div class="arch-node-title">PDV / Caixa</div>
+        <div class="arch-node-sub">Registra venda</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">📱</div>
+        <div class="arch-node-title">Consumidor</div>
+        <div class="arch-node-sub">Escaneia QR</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:56px; display:flex; gap:16px; flex-wrap:wrap">
+    <a href="verificar.html" class="btn btn-primary">Simular verificação →</a>
+    <a href="aplicacoes.html" class="btn btn-outline">Ver aplicações</a>
+  </div>
+
+</section>
+
+<footer>
+  <strong>S.A.R.A</strong> · Sistema Automático de Reconhecimento de Autenticidade · Projeto Acadêmico
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

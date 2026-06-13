@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.R.A — Sistema de Autenticidade</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Hero ── */
+.hero-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.hero-tag span {
+  width: 32px; height: 1px;
+  background: var(--muted);
+}
+
+.hero-title {
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+  display: block;
+}
+.hero-title .ghost {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 24px 0 44px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 80px;
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  display: flex;
+  gap: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.stat-item {}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.stat-num span { color: var(--accent); }
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── Scroll indicator ── */
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  animation: bobble 2s ease-in-out infinite;
+}
+.scroll-arrow {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+@keyframes bobble {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── Problema / Solução ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 60px;
+}
+.problem-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+.problem-card.solution {
+  border-color: rgba(0,229,160,0.2);
+  background: linear-gradient(135deg, rgba(0,229,160,0.04), var(--bg2));
+}
+.card-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.card-body {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.card-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.card-list li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+.solution .card-list li::before { background: var(--accent); }
+
+/* ── Produtos ── */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 48px;
+}
+.produto-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  text-align: center;
+  transition: all .25s;
+  cursor: default;
+}
+.produto-item:hover {
+  border-color: rgba(0,229,160,0.25);
+  background: var(--bg3);
+  transform: translateY(-4px);
+}
+.produto-icon { font-size: 28px; margin-bottom: 10px; }
+.produto-name { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+@media (max-width: 768px) {
+  .hero-wrapper { padding: 0 20px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .stats-bar { gap: 28px; }
+  .hero-title { font-size: 52px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">S.A.R.A<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Início</a></li>
+    <li><a href="como-funciona.html">Como funciona</a></li>
+    <li><a href="verificar.html">Verificar produto</a></li>
+    <li><a href="aplicacoes.html">Aplicações</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="verificar.html" class="nav-cta">Verificar agora</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero-wrapper" style="padding-top:64px; position:relative;">
+  <div class="badge">Projeto acadêmico</div>
+
+  <h1 class="hero-title">
+    <em>S.A.R.A</em>
+    Sistema de <br>
+    <span class="ghost">Autenticidade</span>
+  </h1>
+
+  <p class="hero-sub">
+    Tecnologia de rastreamento e verificação de produtos por QR Code único — combatendo falsificação em qualquer setor da indústria.
+  </p>
+
+  <div class="hero-actions">
+    <a href="como-funciona.html" class="btn btn-primary">
+      Como funciona
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="verificar.html" class="btn btn-outline">Simular verificação</a>
+  </div>
+
+  <div class="stats-bar fade-up">
+    <div class="stat-item">
+      <div class="stat-num">9<span>+</span></div>
+      <div class="stat-label">Setores cobertos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1<span>x</span></div>
+      <div class="stat-label">QR único por produto</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3<span>s</span></div>
+      <div class="stat-label">Para verificar</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Rastreável</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    Scroll
+  </div>
+</div>
+
+<!-- ── PROBLEMA / SOLUÇÃO ── -->
+<section>
+  <div class="section-label">O contexto</div>
+  <h2 class="section-title fade-up">Falsificação é um problema real</h2>
+  <p class="section-sub fade-up">Medicamentos, bebidas, cosméticos e eletrônicos falsificados causam prejuízos bilionários e colocam vidas em risco.</p>
+
+  <div class="problem-grid">
+    <div class="problem-card fade-up">
+      <div class="card-icon">⚠️</div>
+      <div class="card-title">O problema</div>
+      <div class="card-body">Produtos falsificados circulam livremente sem nenhum sistema de rastreamento acessível ao consumidor final.</div>
+      <ul class="card-list">
+        <li>Riscos à saúde do consumidor</li>
+        <li>Prejuízo financeiro às empresas</li>
+        <li>Perda de confiança nas marcas</li>
+        <li>Reutilização indevida de embalagens</li>
+      </ul>
+    </div>
+
+    <div class="problem-card solution fade-up">
+      <div class="card-icon">✅</div>
+      <div class="card-title">A solução S.A.R.A</div>
+      <div class="card-body">Um QR Code único registrado em banco de dados vincula cada produto à sua origem e histórico de venda.</div>
+      <ul class="card-list">
+        <li>Verificação instantânea pelo consumidor</li>
+        <li>Alerta automático de possível fraude</li>
+        <li>Rastreabilidade da cadeia de distribuição</li>
+        <li>Aplicável a qualquer tipo de produto</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRODUTOS ── -->
+<section style="padding-top:0">
+  <div class="section-label">Abrangência</div>
+  <h2 class="section-title fade-up">Qualquer produto. Qualquer setor.</h2>
+
+  <div class="produtos-grid">
+    <div class="produto-item fade-up"><div class="produto-icon">💊</div><div class="produto-name">Medicamentos</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">🍾</div><div class="produto-name">Bebidas</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">💄</div><div class="produto-name">Cosméticos</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">👜</div><div class="produto-name">Luxo</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">📱</div><div class="produto-name">Eletrônicos</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">🔧</div><div class="produto-name">Autopeças</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">👗</div><div class="produto-name">Vestuário</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">🥫</div><div class="produto-name">Alimentos</div></div>
+    <div class="produto-item fade-up"><div class="produto-icon">🌸</div><div class="produto-name">Perfumes</div></div>
+  </div>
+
+  <div style="margin-top:48px; text-align:center">
+    <a href="aplicacoes.html" class="btn btn-outline">Ver todas as aplicações →</a>
+  </div>
+</section>
+
+<footer>
+  <strong>S.A.R.A</strong> · Sistema Automático de Reconhecimento de Autenticidade · Projeto Acadêmico
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
